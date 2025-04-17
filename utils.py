@@ -267,7 +267,7 @@ def waitForScanner(win, message_stim, keylist=SCANNER_KEYS, loop_callback=None, 
 def connectSerial(com_port):
     if not com_port:
         RuntimeError("communication port for connecting to the arduino is not defined")
-    ser = serial.Serial(com_port, 115200)
+    ser = serial.Serial(com_port, 115200, timeout=0.100)
     ser.reset_input_buffer()
     ser.reset_output_buffer()
     return ser
