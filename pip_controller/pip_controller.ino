@@ -133,7 +133,7 @@ Device* B = nullptr;
 void setup()
 {
   Serial.begin(115200);
-  Serial1.begin(115200); // for debugging
+  // Serial1.begin(115200); // for debugging
   // try turnig the leds off (one is on)
   //pinMode(2, OUTPUT); // power off valves
   //pinMode(3, OUTPUT);
@@ -192,8 +192,8 @@ void loop()
         if (inputString.charAt(i) == ',') {
           commaPositions[commaCount] = i;
           commaCount++;
-          Serial1.print("Comma at position: ");
-          Serial1.println(i);
+          // Serial1.print("Comma at position: ");
+          // Serial1.println(i);
         }
       }
 
