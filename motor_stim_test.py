@@ -67,13 +67,14 @@ channel_b = {
     "fiber_threshold": fiber_optic_threshold
 }
 
-trial_list = ["H", "F", "H", "F", "H", "F", "H", "F"]
+trial_list = ["H", "F"]*4
+trial_list = [{TRIAL_PARAM: t} for t in trial_list]
 
 expInfo = {
     'participant': '',
     'session': '01',
     'comPort' : [p.device for p in serial.tools.list_ports.comports() if 'Bluetooth' not in p.device],
-    'testMode':False,
+    'testMode':True,
     'date|hid': data.getDateStr(format='%Y-%m-%d_%Hh%M-%S-%f'),
     'expName|hid': expName,
     'psychopyVersion|hid': psychopyVersion,
