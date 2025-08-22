@@ -67,12 +67,14 @@ channel_b = {
     "fiber_threshold": fiber_optic_threshold
 }
 
-design_file = "assets/precbaby_design1.csv"
+design_file = f"{_thisDir}/assets/pip_design1.csv"
+reversed_design_file = f"{_thisDir}/assets/pip_design1_reverse.csv"
 
 expInfo = {
     'participant': '',
     'session': '01',
     'comPort' : [p.device for p in serial.tools.list_ports.comports() if 'Bluetooth' not in p.device],
+    'reverse_order': False,
     'testMode':False,
     'date|hid': data.getDateStr(format='%Y-%m-%d_%Hh%M-%S-%f'),
     'expName|hid': expName,
@@ -207,7 +209,7 @@ def create_routines_and_run(expInfo, thisExp, win, globalClock=None):
         thisExp=thisExp,
         win=win,
         globalClock=globalClock,
-        trials=design_file,
+        trials=reversed_design_file if expInfo['reverse_order'] else design_file,
         routines=routines,
         mri_wait_stim=wait_text,
         mri_wait_callback=clear_serial_buffer,
@@ -223,7 +225,7 @@ def create_routines_and_run(expInfo, thisExp, win, globalClock=None):
 if __name__ == '__main__':
     # call all functions in order
     expInfo = showExpInfoDlg(expInfo=expInfo)
-    _filename = f'{expInfo["participant"]}_{expInfo["session"]}_{expName}_{expInfo["date|hid"]}'
+    _filename = f'{expInfo["participant"]}_{expInfo["session"]}_{expName}{"_reversed" if expInfo["reverse_order"] else ""}_{expInfo["date|hid"]}'
     thisExp = setupData(expInfo=expInfo, filename=_filename)
     logFile = setupLogging(filename=thisExp.dataFileName, loggingLevel=_loggingLevel)
     logging.info(f"expInfo = {expInfo}")

@@ -398,7 +398,7 @@ def run(expInfo, thisExp, win,
     logging.setDefaultClock(globalClock) 
     
     if isinstance(trials, str) or isinstance(trials, Path):
-        trials = data.importConditions(trials)
+        trials = data.importConditions(str(trials))
     elif not isinstance(trials, list):
         raise TypeError("'trials' parameter must be of types 'str' or 'Path' or 'list'. Input was not any of the expected types.")
 

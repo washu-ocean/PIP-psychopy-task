@@ -67,7 +67,7 @@ channel_a = {
 #     "fiber_threshold": fiber_optic_threshold
 # }
 
-design_file = "assets/precbaby_design2.csv"
+design_file = f"{_thisDir}/assets/pip_design2.csv"
 
 expInfo = {
     'participant': '',
