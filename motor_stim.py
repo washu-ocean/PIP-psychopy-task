@@ -117,6 +117,19 @@ def create_routines_and_run(expInfo, thisExp, win, globalClock=None):
     air_deviceB = AirDevice(name="air_channel_B", 
                             serial_device=arduino,
                             **channel_b)
+
+    def make_run_callback():
+        last_status_log_time = -air_sample_rate
+        def status_check():
+            nonlocal last_status_log_time, globalClock, air_deviceA, arduino
+            arduino.reset_input_buffer()
+            t = globalClock.getTime(format='float')
+            if t - last_status_log_time >= air_sample_rate:
+                air_deviceA.status_report()
+
+        return status_check
+        
+        
     
     clear_serial_buffer = lambda : arduino.reset_input_buffer() or arduino.readline()
     get_arduino_time = lambda : air_deviceA.data_from_message(air_deviceA.read(flush=True))[0]
@@ -215,7 +228,7 @@ def create_routines_and_run(expInfo, thisExp, win, globalClock=None):
         mri_wait_callback=clear_serial_buffer,
         air_stim_clock_time=get_arduino_time,
         pre_loop_callback=clear_serial_buffer,
-        run_loop_callback=clear_serial_buffer,
+        run_loop_callback=make_run_callback(),
         post_loop_callback=arduino.close
     )
     
@@ -238,11 +251,12 @@ if __name__ == '__main__':
     logging.info(f"scanner_pulses_needed = {SCANNER_PULSES_NEEDED}")
     win = setupWindow(expInfo=expInfo, winSize=_winSize, fullScr=_fullScr)
     setupDevices(expInfo=expInfo, thisExp=thisExp, win=win)
+    global_clock = core.Clock(format='float')
     create_routines_and_run(
         expInfo=expInfo, 
         thisExp=thisExp, 
         win=win,
-        globalClock='float'
+        globalClock=global_clock
     )
     saveData(thisExp=thisExp)
     quit(thisExp=thisExp, win=win)

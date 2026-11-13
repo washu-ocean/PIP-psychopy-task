@@ -62,16 +62,30 @@ class AirDevice():
         self._serial_device.write(f"{msg}\n".encode("utf-8"))
 
 
-    def data_from_message(self, msg) -> tuple:
+    def data_from_message(self, msg, all_data:bool=False) -> tuple:
         if not msg:
             raise ValueError("Received empty data string")
         msg_values = tuple(int(d.split(b':')[-1]) for d in msg[:-2].split(b','))
-        if len(msg_values) == 3:
+        if (len(msg_values) == 3) and (not all_data):
             # (time, channel A data, channel B data)
             return (msg_values[0], msg_values[self._message_index])
         else:
             # return just the timestamp
             return msg_values
+
+    def status_report(self) -> tuple:
+        update_data = self.data_from_message(self.read(flush=True))
+        if len(update_data) >= 1:
+            time_from_start = (update_data[0] - self._start_time)/1000
+        else:
+            time_from_start = "error"
+
+        if len(update_data) != 3:
+            logging.info(f"Status reporting did not recieve all data values. Time from trial_start: {time_from_start} -> {update_data}")
+        else:
+            logging.info(f"Time from trial_start:{time_from_start}, Fiber Value A:{update_data[1]}, Fiber Value B:{update_data[2]}")
+
+        return update_data
     
 
     def start(self, wait_for_confirm = True) -> str:
