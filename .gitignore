@@ -1,2 +1,39 @@
-.DS_Store
+# uv / Virtual Environments
+.venv/
+venv/
+env/
+.uv/
+
+# Python Bytecode & Caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Testing & Linting Caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+
+# PsychoPy Experiment Outputs & Logs (optional: remove if you want data tracked)
 data/
+*.psydat
+*.log
+
+# macOS / Windows / IDE Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp

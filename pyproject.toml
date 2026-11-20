@@ -1,0 +1,17 @@
+[project]
+name = "pip-task"
+version = "0.1.0"
+description = "Motor stim task for PIP study"
+readme = "README.md"
+requires-python = "==3.10.*"
+dependencies = [
+    "psychopy==2024.2.4",
+]
+
+[tool.uv]
+override-dependencies = [
+    "pypi-search @ git+https://github.com/nbmorgan/pypi-search",
+]
+constraint-dependencies = [
+    "pyqt6<6.11",
+]
