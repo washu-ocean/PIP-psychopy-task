@@ -126,6 +126,7 @@ def create_routines_and_run(expInfo, thisExp, win, globalClock=None):
             t = globalClock.getTime(format='float')
             if t - last_status_log_time >= air_sample_rate:
                 air_deviceA.status_report()
+                last_status_log_time = t
 
         return status_check
         

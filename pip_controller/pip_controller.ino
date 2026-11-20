@@ -38,7 +38,17 @@ class Device {
       //Serial.println("madeA:");
     }
 
-    int Update() {// return the lastest fibre optics (1 fibre line
+    int ReadFiberData() {
+      if(flexionValve == 2){
+          fibreValue = analogRead(A0);
+        }
+        if(flexionValve == 4){
+          fibreValue = analogRead(A1);
+        }
+        return fibreValue;
+    }
+
+    boolean Update() {// return the lastest fibre optics (1 fibre line
 
       //if there are remaining repetitons // else return void to destroy device?
       if (remainingReps > 0) {
@@ -78,16 +88,8 @@ class Device {
           }
           inFlextionState = HIGH;
           previousMillis = currentMillis;   // Remember the time
-        }
-        if(flexionValve == 2){
-          fibreValue = analogRead(A0);
-        }
-        if(flexionValve == 4){
-          fibreValue = analogRead(A1);
-        }
         
-        
-        return fibreValue; // only return fibre every 50ms? from here? may not be at the same time
+        return true; // only return fibre every 50ms? from here? may not be at the same time
 
       } else { // finishe
         //analogWrite(flexionValve, 0);  // Close both wrists
@@ -97,7 +99,7 @@ class Device {
         // digitalWrite(extensionValve, LOW);
         // digitalWrite(flexionLed, LOW); // and leds
         // digitalWrite(extensionLed, LOW);
-        return -1; // no reps remaning %return everything and then sort
+        return false; // no reps remaning %return everything and then sort
       }
     }
     void Stop() {
@@ -244,33 +246,45 @@ void loop()
     //inputString = "";// reset the input
   }
   if (runningA) {
-    fibreA = A->Update(); // fibre is return value or -1 in which case destroy and created = false
-    if (fibreA == -1) { // device finished
-      //destroy object?
-      runningA = false;
+    runningA = A->Update()
+    if (!runningA) { // device finished
       Serial.print("stoppedA:");
       Serial.println(millis()-startMillis);
     }
+    // fibreA = A->Update(); // fibre is return value or -1 in which case destroy and created = false
+    // if (fibreA == -1) { // device finished
+    //   //destroy object?
+    //   runningA = false;
+    //   Serial.print("stoppedA:");
+    //   Serial.println(millis()-startMillis);
+    // }
   }
 
   if (runningB) {
-    fibreB = B->Update(); // fibre is return value or -1 in which case destroy and created = false
-    if (fibreB == -1) { // device finished
-      //destroy object?
-      runningB = false;
+    runningB = B->Update()
+    if (!runningB) { // device finished
       Serial.print("stoppedB:");
       Serial.println(millis()-startMillis);
     }
+    // fibreB = B->Update(); // fibre is return value or -1 in which case destroy and created = false
+    // if (fibreB == -1) { // device finished
+    //   //destroy object?
+    //   runningB = false;
+    //   Serial.print("stoppedB:");
+    //   Serial.println(millis()-startMillis);
+    // }
   }
 
   unsigned long currentMillis = millis(); // put in class
   if (currentMillis - previousMillisSerial >= serialInterval) { // serial feedback every 50ms
     previousMillisSerial = currentMillis;
-      Serial.print("time:");
-      Serial.print(currentMillis - startMillis);
-      Serial.print(", A:");
-      Serial.print(fibreA);
-      Serial.print(", B:");
-      Serial.println(fibreB);
+    fibreA = A->ReadFiberData()
+    fibreB = B->ReadFiberData()
+    Serial.print("time:");
+    Serial.print(currentMillis - startMillis);
+    Serial.print(", A:");
+    Serial.print(fibreA);
+    Serial.print(", B:");
+    Serial.println(fibreB);
   }
 }

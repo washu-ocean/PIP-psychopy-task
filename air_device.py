@@ -74,7 +74,7 @@ class AirDevice():
             return msg_values
 
     def status_report(self) -> tuple:
-        update_data = self.data_from_message(self.read(flush=True))
+        update_data = self.data_from_message(self.read(flush=True), all_data=True)
         if len(update_data) >= 1:
             time_from_start = (update_data[0] - self._start_time)/1000
         else:
